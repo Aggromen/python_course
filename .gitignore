@@ -1,2 +1,5 @@
 password.py
 *.txt
+settings.py
+__pycache__/
+*.log
