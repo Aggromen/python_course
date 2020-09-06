@@ -12,7 +12,7 @@ vowels = ['а', 'о', 'и', 'е', 'ё', 'э', 'ы', 'у', 'ю', 'я']
 def greet_user(update, context):
     print('Сучара нажал на старт!')
     user_first_name = update.message.chat.first_name
-    update.message.reply_text(f'Здорова, Сучара({user_first_name})!')
+    update.message.reply_text(f'Здорова, Сударь({user_first_name})!')
 
 def echo_ans(update, context):
     text = update.message.text
@@ -34,7 +34,7 @@ def main():
     dp.add_handler(CommandHandler('start', greet_user))
     dp.add_handler(MessageHandler(Filters.text, echo_ans))
     
-    logging.info('Sychara is starting')
+    logging.info('user is starting')
 
     mybot.start_polling()
     mybot.idle()
