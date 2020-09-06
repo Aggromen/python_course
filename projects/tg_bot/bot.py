@@ -20,7 +20,7 @@ def echo_ans(update, context):
     ans_text = ''
     for i in (text):
         ans_text = ans_text + i
-        if i in vowels:
+        if i.lower() in vowels:
             ans_text = ans_text + 'пу'
     print(ans_text)
     update.message.reply_text(ans_text)  
