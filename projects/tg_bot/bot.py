@@ -10,7 +10,7 @@ PROXY = {'proxy_url': settings.PROXY_URL,
 vowels = ['а', 'о', 'и', 'е', 'ё', 'э', 'ы', 'у', 'ю', 'я']
 
 def greet_user(update, context):
-    print('Сучара нажал на старт!')
+    print('Сударь нажал на старт!')
     user_first_name = update.message.chat.first_name
     update.message.reply_text(f'Здорова, Сударь({user_first_name})!')
 
