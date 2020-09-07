@@ -1,6 +1,7 @@
 import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import settings
+from googletrans import Translator
 
 logging.basicConfig(format='%(asctime)s - %(message)s', filename='bot.log', level=logging.INFO)
 
@@ -8,6 +9,8 @@ PROXY = {'proxy_url': settings.PROXY_URL,
     'urllib3_proxy_kwargs': {'username': settings.PROXY_USERNAME, 'password': settings.PROXY_PASSWORD}}
 
 vowels = ['а', 'о', 'и', 'е', 'ё', 'э', 'ы', 'у', 'ю', 'я']
+
+translator = Translator()
 
 def greet_user(update, context):
     print('Сударь нажал на старт!')
@@ -18,12 +21,18 @@ def echo_ans(update, context):
     text = update.message.text
     print(text)
     ans_text = ''
-    for i in (text):
+    for i in text:
         ans_text = ans_text + i
         if i.lower() in vowels:
             ans_text = ans_text + 'пу'
     print(ans_text)
     update.message.reply_text(ans_text)  
+
+def translate_message_to_eng(update, context):
+    text = update.message.text
+    ans_text = translator.translate(text, src='russian')
+    update.message.reply_text(ans_text.text)
+
 
 def main():
     mybot = Updater(settings.API_KEY, 
@@ -32,6 +41,7 @@ def main():
 
     dp = mybot.dispatcher
     dp.add_handler(CommandHandler('start', greet_user))
+    dp.add_handler(CommandHandler('translate_to_eng', translate_message_to_eng))
     dp.add_handler(MessageHandler(Filters.text, echo_ans))
     
     logging.info('user is starting')
