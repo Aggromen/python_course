@@ -54,15 +54,27 @@ def create_print_order_square(input_string, x_min, x_max, y_min, y_max, x_direct
         x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur = change_direction(x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur)
     return print_order_square
 
+def create_print_order_square_v2(input_string, square_len, x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur):
+    print_order_square = {(x, y): None for x in range(square_len) for y in range(square_len)}
+    input_string_len = len(input_string)
+    letter_order_number = 0
+    while letter_order_number < input_string_len:
+        print_order_square[(x_cur, y_cur)] = letter_order_number
+        letter_order_number += 1
+        x_cur += x_direction
+        y_cur += y_direction
+        x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur = change_direction(x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur)
+    return print_order_square
+
 def print_input_string_with_print_order_square(input_string, print_order_square, square_len):
-    for y in range(0, square_len + 1):
-        for x in range(0, square_len + 1):
-            print_order_square_key = (x, y)
+    for y_square in range(0, square_len + 1):
+        for x_square in range(0, square_len + 1):
+            print_order_square_key = (x_square, y_square)
             print_string_number = print_order_square.get(print_order_square_key)
             if print_string_number is None:
-                print(' ', end=' ')
+                print(' ', end='')
             else:
-                print(input_string[print_string_number], end=' ')
+                print(input_string[print_string_number], end='')
         print()
 
 
@@ -73,9 +85,9 @@ def main():
 
     x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur = 0, square_len, 0, square_len, -1, 0, square_len, 0
 
-    print_order_square = dict(create_print_order_square(input_string, x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur))
+    print_order_square = dict(create_print_order_square_v2(input_string, square_len, x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur))
     
-    print_input_string_with_print_order_square(input_string, print_order_square, square_len)
+    print_input_string_with_print_order_square(input_string, print_order_square, square_len)     
 
 if __name__ == "__main__":
     main()
