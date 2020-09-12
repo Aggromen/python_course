@@ -3,3 +3,5 @@ password.py
 settings.py
 __pycache__/
 *.log
+test.py
+*.google-cookie

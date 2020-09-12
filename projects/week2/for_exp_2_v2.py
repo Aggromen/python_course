@@ -1,14 +1,6 @@
 import math
 
-def change_direction(cur_state):
-    x_min = cur_state[0]
-    x_max = cur_state[1]
-    y_min = cur_state[2]
-    y_max = cur_state[3]
-    x_direction = cur_state[4]
-    y_direction = cur_state[5]
-    x_cur = cur_state[6]
-    y_cur = cur_state[7]
+def change_direction(x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur):
     if x_cur == x_min and x_direction == -1:
         y_min +=1
         x_direction = 0
@@ -25,7 +17,7 @@ def change_direction(cur_state):
         x_min += 1
         x_direction = 1
         y_direction = 0
-    return [x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur]
+    return x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur
 
 input_string = input('Введите строку, распечатаем её красиво: ')
 
@@ -39,25 +31,13 @@ else:
 
 print_order = {}    
 
-
-x_direction, y_direction = -1, 0
-x_start, y_start = square_len, 0
-x_min, x_max, y_min, y_max = 0, square_len, 0, square_len
-x_cur, y_cur = x_start, y_start
-
-cur_state = [x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur]
+x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur = 0, square_len, 0, square_len, -1, 0, square_len, 0
 
 for i in range(input_string_len):
-    x_direction = cur_state[4]
-    y_direction = cur_state[5]
-    x_cur = cur_state[6]
-    y_cur = cur_state[7]
     print_order[(x_cur, y_cur)] = i
     x_cur += x_direction
     y_cur += y_direction
-    cur_state[6] = x_cur
-    cur_state[7] = y_cur  
-    cur_state = list(change_direction(cur_state))
+    x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur = change_direction(x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur)
 
 # for i in print_order:
 #     print(i, end=' ')

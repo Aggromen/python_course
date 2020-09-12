@@ -2,6 +2,8 @@ import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import settings
 from googletrans import Translator
+import ephem
+import pylev
 
 logging.basicConfig(format='%(asctime)s - %(message)s', filename='bot.log', level=logging.INFO)
 
@@ -9,6 +11,8 @@ PROXY = {'proxy_url': settings.PROXY_URL,
     'urllib3_proxy_kwargs': {'username': settings.PROXY_USERNAME, 'password': settings.PROXY_PASSWORD}}
 
 vowels = ['а', 'о', 'и', 'е', 'ё', 'э', 'ы', 'у', 'ю', 'я']
+
+planet_list = ['Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']
 
 translator = Translator()
 
@@ -33,6 +37,45 @@ def translate_message_to_eng(update, context):
     ans_text = translator.translate(text, src='russian')
     update.message.reply_text(ans_text.text)
 
+def find_constellation(best_planet_choice):
+    time_now = ephem.now()
+    if best_planet_choice == 'Mercury':
+        user_find_planet = ephem.Mercury()
+    elif best_planet_choice == 'Venus':
+        user_find_planet = ephem.Venus()
+    elif best_planet_choice == 'Mars':
+        user_find_planet = ephem.Mars()
+    elif best_planet_choice == 'Jupiter':
+        user_find_planet = ephem.Jupiter()
+    elif best_planet_choice == 'Saturn':
+        user_find_planet = ephem.Saturn()
+    elif best_planet_choice == 'Uranus':
+        user_find_planet = ephem.Uranus()
+    elif best_planet_choice == 'Neptune':
+        user_find_planet = ephem.Neptune()                                
+    user_find_planet.compute(time_now)
+    _, full_name = ephem.constellation(user_find_planet)
+    return full_name
+
+def planet_constellation(update, context):
+    text = update.message.text
+    text = text.split()
+    min_distance = 1000
+    best_planet_choice = ''
+    user_planet_in_text = ''
+    for j in text:
+        for i in planet_list:
+            if pylev.levenshtein(i, j) < min_distance:
+                min_distance = pylev.levenshtein(i, j)
+                best_planet_choice = i
+                user_planet_in_text = j
+    full_name = find_constellation(best_planet_choice)
+    full_name_ru = translator.translate(full_name,dest='russian', src='en').text
+    if user_planet_in_text.upper() != best_planet_choice.upper():
+        ans_text = f'Did you mean {best_planet_choice}? \n {full_name} / {full_name_ru}'
+    update.message.reply_text(ans_text)            
+
+
 
 def main():
     mybot = Updater(settings.API_KEY, 
@@ -42,6 +85,7 @@ def main():
     dp = mybot.dispatcher
     dp.add_handler(CommandHandler('start', greet_user))
     dp.add_handler(CommandHandler('translate_to_eng', translate_message_to_eng))
+    dp.add_handler(CommandHandler('planet', planet_constellation))
     dp.add_handler(MessageHandler(Filters.text, echo_ans))
     
     logging.info('user is starting')
