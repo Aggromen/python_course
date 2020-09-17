@@ -6,3 +6,4 @@ __pycache__/
 test.py
 *.google-cookie
 koans/*
+*_env/

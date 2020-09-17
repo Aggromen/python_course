@@ -42,21 +42,7 @@ def translate_message_to_eng(update, context):
 def find_constellation(best_planet_choice):
     time_now = ephem.now()
     planet_obj = getattr(ephem, best_planet_choice)
-    user_find_planet = planet_obj()
-    # if best_planet_choice == 'Mercury':
-    #     user_find_planet = ephem.Mercury()
-    # elif best_planet_choice == 'Venus':
-    #     user_find_planet = ephem.Venus()
-    # elif best_planet_choice == 'Mars':
-    #     user_find_planet = ephem.Mars()
-    # elif best_planet_choice == 'Jupiter':
-    #     user_find_planet = ephem.Jupiter()
-    # elif best_planet_choice == 'Saturn':
-    #     user_find_planet = ephem.Saturn()
-    # elif best_planet_choice == 'Uranus':
-    #     user_find_planet = ephem.Uranus()
-    # elif best_planet_choice == 'Neptune':
-    #     user_find_planet = ephem.Neptune()                                
+    user_find_planet = planet_obj()                                
     user_find_planet.compute(time_now)
     _, full_name = ephem.constellation(user_find_planet)
     return full_name

@@ -21,7 +21,7 @@ def cant_move_right(x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur,
     y_direction = -1
     return x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur
 
-def сant_move_up(x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur):
+def cant_move_up(x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur):
     x_max -= 1
     x_direction = -1
     y_direction = 0
@@ -34,14 +34,19 @@ def cant_move_down(x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, 
     return x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur        
 
 def change_direction(x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur):
+    cant_go = True
     if x_cur == x_min and x_direction == -1:
-        x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur = cant_move_left(x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur)
+        where_cant_go = cant_move_left
     elif x_cur == x_max and x_direction == 1:
-        x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur = cant_move_right(x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur)
+        where_cant_go = cant_move_right
     elif y_cur == y_min and y_direction == -1:
-        x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur = сant_move_up(x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur)
+        where_cant_go = cant_move_up
     elif y_cur == y_max and y_direction == 1:
-        x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur = cant_move_down(x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur)
+        where_cant_go = cant_move_down
+    else:
+        cant_go = False
+    if cant_go:
+        x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur = where_cant_go(x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur)    
     return x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur
 
 def create_print_order_square(input_string, x_min, x_max, y_min, y_max, x_direction, y_direction, x_cur, y_cur):
